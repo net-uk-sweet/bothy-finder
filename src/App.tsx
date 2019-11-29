@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import "./App.css";
 
-import { SearchType, ResultType } from "./types";
+import { Data, SearchType, ResultType } from "./types";
 
 import bothies from "./bothies.json";
 import munros from "./munros.json";
-
-import gridDistance from "./gridDistance";
 
 import Form from "./Form";
 import List from "./List";
 import Map from "./Map";
 
+import { getResults, getResultsWithinRange } from "./utils";
+
 const App: React.FC = () => {
-  const data: any = {
+  const data: Data = {
     bothies,
     munros
   };
@@ -32,33 +32,50 @@ const App: React.FC = () => {
   };
 
   const handleSearchChange = (search: string) => {
-    const results: ResultType[] =
-      search.length > 2
-        ? data[searchType].filter((el: any) =>
-            el.name.toLowerCase().includes(search)
-          )
-        : [];
+    if (selected) {
+      setSelected(null);
+    }
+    const results: ResultType[] = getResults(data, searchType, search);
 
     setResults(results);
     setSearch(search);
+
+    if (results.length === 1) {
+      const autoSelected = results[0];
+      setSelected(autoSelected);
+      const resultsWithinRange = getResultsWithinRange(
+        data,
+        searchType,
+        autoSelected,
+        distance
+      );
+      setResults(resultsWithinRange);
+    }
   };
 
   const handleDistanceChange = (distance: number) => {
     setDistance(distance);
+    if (selected) {
+      const resultsWithinRange = getResultsWithinRange(
+        data,
+        searchType,
+        selected,
+        distance
+      );
+      setResults(resultsWithinRange);
+    }
   };
 
   const handleItemClick = (item: ResultType) => {
-    const selected: ResultType = results.find(
-      result => result.name === item.name
-    ) as ResultType;
-    const filteredResults = data[
-      searchType === "bothies" ? "munros" : "bothies"
-    ].filter(
-      ({ grid }: any) => parseInt(gridDistance(selected.grid, grid)) <= distance
+    const resultsWithinRange = getResultsWithinRange(
+      data,
+      searchType,
+      item,
+      distance
     );
 
-    setSelected(selected);
-    setResults(filteredResults);
+    setSelected(item);
+    setResults(resultsWithinRange);
   };
 
   return (

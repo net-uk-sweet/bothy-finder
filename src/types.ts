@@ -15,3 +15,8 @@ interface Munro extends BaseResult {
 interface Bothy extends BaseResult {}
 
 export type ResultType = Munro | Bothy;
+
+export interface Data {
+  bothies: ResultType[];
+  munros: ResultType[];
+}
