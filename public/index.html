@@ -15,6 +15,8 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -39,5 +41,19 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <!-- <div id='map'></div> -->
+    <!-- <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibmV0LXVrLXN3ZWV0IiwiYSI6ImNrMzRmaGJqdDBpNW8zaXBqaDg2bWxqazQifQ.xVC6ifqr4x70o3xHXnASyA';
+    var map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: 'mapbox://styles/net-uk-sweet/ck395oc6o23271ct39ql8ph1y', // stylesheet location
+      center: [-4.298098692290864, 57.09638090114919], // starting position [lng, lat]
+      zoom: 8.5 // starting zoom
+    });
+    // map.on('zoom', () => {
+    //   console.log(map.getZoom());
+    //   console.log(map.getCenter());
+    // })
+    </script> -->
   </body>
 </html>
