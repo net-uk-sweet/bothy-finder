@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// @ts-ignore
+import React, { useReducer } from "react";
 import "./App.css";
 
 import { Data, SearchType, ResultType } from "./types";
@@ -12,70 +13,109 @@ import Map from "./Map";
 
 import { getResults, getResultsWithinRange } from "./utils";
 
+interface State {
+  searchType: SearchType;
+  search: string;
+  distance: number;
+  selected?: ResultType;
+  results: ResultType[];
+}
+
+const initialState: State = {
+  searchType: "bothies",
+  search: "",
+  distance: 10,
+  selected: undefined,
+  results: []
+};
+
+const reducer = (data: any) => (state: State, action: any): State => {
+  let selected = undefined;
+  let results: ResultType[] = [];
+  switch (action.type) {
+    case "search":
+      const search: string = action.value;
+      results = getResults(data, state.searchType, search);
+      if (results.length === 1) {
+        selected = results[0];
+        results = getResultsWithinRange(
+          data,
+          state.searchType,
+          selected,
+          state.distance
+        );
+      }
+      return {
+        ...state,
+        selected,
+        search,
+        results: results
+      };
+    case "searchType":
+      return {
+        ...state,
+        searchType: action.value,
+        search: "",
+        selected: undefined,
+        results: []
+      };
+    case "distance":
+      if (state.selected) {
+        results = getResultsWithinRange(
+          data,
+          state.searchType,
+          state.selected,
+          action.value
+        );
+      }
+      return {
+        ...state,
+        distance: action.value,
+        results
+      };
+    case "select":
+      selected = action.value;
+      results = getResultsWithinRange(
+        data,
+        state.searchType,
+        selected,
+        state.distance
+      );
+      return {
+        ...state,
+        selected,
+        results
+      };
+    default:
+      return { ...state };
+  }
+};
+
 const App: React.FC = () => {
   const data: Data = {
     bothies,
     munros
   };
 
-  const [searchType, setSearchType] = useState<SearchType>("bothies");
-  const [search, setSearch] = useState<string>("");
-  const [distance, setDistance] = useState<number>(10);
-  const [selected, setSelected] = useState<ResultType | null>(null);
-  const [results, setResults] = useState<ResultType[]>([]);
+  const [
+    { searchType, search, distance, selected, results },
+    dispatch
+  ] = useReducer(reducer(data), initialState);
 
   const handleSearchTypeChange = (searchType: SearchType) => {
-    setSearchType(searchType);
-    setSearch("");
-    setSelected(null);
-    setResults([]);
+    dispatch({ type: "searchType", value: searchType });
   };
 
   const handleSearchChange = (search: string) => {
-    if (selected) {
-      setSelected(null);
-    }
-    const results: ResultType[] = getResults(data, searchType, search);
-
-    setResults(results);
-    setSearch(search);
-
-    if (results.length === 1) {
-      const autoSelected = results[0];
-      setSelected(autoSelected);
-      const resultsWithinRange = getResultsWithinRange(
-        data,
-        searchType,
-        autoSelected,
-        distance
-      );
-      setResults(resultsWithinRange);
-    }
+    dispatch({ type: "search", value: search });
   };
 
   const handleDistanceChange = (distance: number) => {
-    setDistance(distance);
-    if (selected) {
-      const resultsWithinRange = getResultsWithinRange(
-        data,
-        searchType,
-        selected,
-        distance
-      );
-      setResults(resultsWithinRange);
-    }
+    dispatch({ type: "distance", value: distance });
   };
 
   const handleItemClick = (item: ResultType) => {
-    const resultsWithinRange = getResultsWithinRange(
-      data,
-      searchType,
-      item,
-      distance
-    );
-
-    setSelected(item);
-    setResults(resultsWithinRange);
+    dispatch({ type: "select", value: item });
   };
 
   return (
