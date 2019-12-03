@@ -30,26 +30,26 @@ const initialState: State = {
 };
 
 const reducer = (data: any) => (state: State, action: any): State => {
-  let selected = undefined;
+  const { searchType, distance } = state;
+  let { selected } = state;
   let results: ResultType[] = [];
+
+  const resultsWithRange = (selected: ResultType, distance: number) =>
+    getResultsWithinRange(data, searchType, selected, distance);
+
   switch (action.type) {
     case "search":
       const search: string = action.value;
       results = getResults(data, state.searchType, search);
       if (results.length === 1) {
         selected = results[0];
-        results = getResultsWithinRange(
-          data,
-          state.searchType,
-          selected,
-          state.distance
-        );
+        results = resultsWithRange(selected, distance);
       }
       return {
         ...state,
         selected,
         search,
-        results: results
+        results
       };
     case "searchType":
       return {
@@ -60,13 +60,8 @@ const reducer = (data: any) => (state: State, action: any): State => {
         results: []
       };
     case "distance":
-      if (state.selected) {
-        results = getResultsWithinRange(
-          data,
-          state.searchType,
-          state.selected,
-          action.value
-        );
+      if (selected) {
+        results = resultsWithRange(selected, action.value);
       }
       return {
         ...state,
@@ -74,13 +69,8 @@ const reducer = (data: any) => (state: State, action: any): State => {
         results
       };
     case "select":
-      selected = action.value;
-      results = getResultsWithinRange(
-        data,
-        state.searchType,
-        selected,
-        state.distance
-      );
+      selected = action.value as ResultType;
+      results = resultsWithRange(selected, distance);
       return {
         ...state,
         selected,
