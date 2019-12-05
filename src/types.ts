@@ -5,14 +5,14 @@ interface BaseResult {
   grid: string;
   url: string;
   lat: number;
-  lon: number;
+  lng: number;
 }
 
-interface Munro extends BaseResult {
+export interface Munro extends BaseResult {
   height: number;
 }
 
-interface Bothy extends BaseResult {}
+export interface Bothy extends BaseResult {}
 
 export type ResultType = Munro | Bothy;
 

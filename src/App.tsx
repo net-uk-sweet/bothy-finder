@@ -1,4 +1,3 @@
-// @ts-ignore
 import React, { useReducer } from "react";
 import "./App.css";
 
@@ -41,6 +40,9 @@ const reducer = (data: any) => (state: State, action: any): State => {
     case "search":
       const search: string = action.value;
       results = getResults(data, state.searchType, search);
+      if (selected) {
+        selected = undefined;
+      }
       if (results.length === 1) {
         selected = results[0];
         results = resultsWithRange(selected, distance);
@@ -127,6 +129,7 @@ const App: React.FC = () => {
           zoom={6.75}
           locations={results}
           selected={selected}
+          onLocationClick={handleItemClick}
         />
       </div>
       <aside className="list">

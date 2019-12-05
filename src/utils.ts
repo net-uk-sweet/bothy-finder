@@ -1,6 +1,6 @@
 import gridDistance from "./gridDistance";
 
-import { Data, SearchType, ResultType } from "./types";
+import { Data, SearchType, ResultType, Munro } from "./types";
 
 export const getResults = (
   data: Data,
@@ -23,4 +23,9 @@ export const getResultsWithinRange = (
     ({ grid }: any) => parseInt(gridDistance(selected.grid, grid)) <= distance
   );
 
-//export const getSelected = (results: ResultType[], )
+export const isMunro = (tbd: ResultType): boolean => {
+  if ((tbd as Munro).height) {
+    return true;
+  }
+  return false;
+};

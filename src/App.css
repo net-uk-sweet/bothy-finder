@@ -35,3 +35,28 @@
   right: 0;
   top: 0;
 }
+
+div, fieldset {
+  margin-bottom: 1rem;
+}
+
+fieldset {
+  border: 0;
+  padding: 0;
+}
+
+p { display: inline; }
+
+label {
+  font-weight: bold;
+  margin: 0 0.5rem;
+}
+
+.show {
+  color: black;
+}
+
+.hide {
+  color: grey;
+  font-weight: normal;
+}
