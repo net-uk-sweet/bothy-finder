@@ -1,6 +1,7 @@
 import React from "react";
 
-import { ResultType } from "./types";
+import { ResultType, Munro } from "./types";
+import { isMunro } from "./utils";
 
 export default function List({
   items,
@@ -13,10 +14,25 @@ export default function List({
   return (
     <ul>
       {items.map((item: ResultType) => {
-        const { name, grid } = item;
+        const { name, grid, url } = item;
         return (
           <li key={`${name}${grid}`}>
-            <button onClick={handleItemClick(item)}>{name}</button>
+            <article onClick={handleItemClick(item)}>
+              <h1>{name}</h1>
+              <dl>
+                <div>
+                  <dt>Grid reference:</dt>
+                  <dd>{grid}</dd>
+                </div>
+                {isMunro(item) && (
+                  <div>
+                    <dt>Height:</dt>
+                    <dd>{(item as Munro).height} metres</dd>
+                  </div>
+                )}
+              </dl>
+              <a href={url}>More info</a>
+            </article>
           </li>
         );
       })}

@@ -27,7 +27,11 @@ export default function Map({
   const markers: any = useRef([]);
   const renderMarkers = useRef(false);
 
-  const handleClick = (location: ResultType) => () => onLocationClick(location);
+  const handleClick = (location: ResultType) => () => {
+    if (!selected) {
+      onLocationClick(location);
+    }
+  };
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -65,7 +69,9 @@ export default function Map({
       });
     }
     markers.current = combinedLocations.map((location, i) => {
-      const popup = new mapboxgl.Popup({ offset: 25 }).setText(location.name);
+      const popup = new mapboxgl.Popup({ offset: [-15, -15] }).setText(
+        location.name
+      );
 
       const el = document.createElement("div");
       el.innerHTML = isMunro(location) ? "&#9650" : "&#x2302";
