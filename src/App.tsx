@@ -111,9 +111,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <main>
-      <header className="form">
+    <div className="wrapper">
+      <header className="header">
         <h1>Bothy finder</h1>
+      </header>
+      <div className={`toolbar`}>
         <Form
           searchType={searchType}
           search={search}
@@ -122,9 +124,9 @@ const App: React.FC = () => {
           onSearchChange={handleSearchChange}
           onDistanceChange={handleDistanceChange}
         />
-      </header>
-      <div className="container">
-        <div className="map">
+      </div>
+      <main className="main">
+        <section className="map">
           <Map
             lat={57.09638090114919}
             lng={-4.298098692290864}
@@ -133,12 +135,12 @@ const App: React.FC = () => {
             selected={selected}
             onLocationClick={handleItemClick}
           />
-        </div>
-        <aside className="list">
+        </section>
+        <aside className={`sidebar`}>
           <List items={results} onItemClick={handleItemClick} />
         </aside>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 };
 
