@@ -92,9 +92,10 @@ article {
 }
 
 .sidebar {
-  width: 240px;
+  border: 1px solid red;
+  width: 0;
   overflow-y: scroll;
-  transition: width 1s ease-out
+  transition: width 0.3s ease-out;
 }
 
 .sidebar.open {

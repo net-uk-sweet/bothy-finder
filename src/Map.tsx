@@ -10,6 +10,7 @@ interface Props {
   zoom: number;
   locations: ResultType[];
   selected?: ResultType;
+  animating: boolean;
   onLocationClick: (item: ResultType) => void;
 }
 
@@ -19,10 +20,12 @@ export default function Map({
   zoom,
   locations,
   selected,
+  animating,
   onLocationClick
 }: Props) {
   const [map, setMap] = useState(null);
   const mapContainer: any = useRef(null);
+  const interval: any = useRef(null);
 
   const markers: any = useRef([]);
   const renderMarkers = useRef(false);
@@ -102,6 +105,19 @@ export default function Map({
       });
     }
   });
+
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+    if (!animating && interval.current) {
+      // console.log("clearing animation");
+      interval.current && clearInterval(interval.current);
+      return;
+    }
+    // console.log("starting animation");
+    interval.current = setInterval(() => (map as any).resize(), 10);
+  }, [animating, map]);
 
   return (
     <div>

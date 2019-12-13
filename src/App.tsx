@@ -18,6 +18,7 @@ interface State {
   distance: number;
   selected?: ResultType;
   results: ResultType[];
+  animating: boolean;
 }
 
 const initialState: State = {
@@ -25,7 +26,8 @@ const initialState: State = {
   search: "",
   distance: 10,
   selected: undefined,
-  results: []
+  results: [],
+  animating: false
 };
 
 const reducer = (data: any) => (state: State, action: any): State => {
@@ -78,6 +80,11 @@ const reducer = (data: any) => (state: State, action: any): State => {
         selected,
         results
       };
+    case "animating":
+      return {
+        ...state,
+        animating: action.value
+      };
     default:
       return { ...state };
   }
@@ -90,7 +97,7 @@ const App: React.FC = () => {
   };
 
   const [
-    { searchType, search, distance, selected, results },
+    { searchType, search, distance, selected, results, animating },
     dispatch
   ] = useReducer(reducer(data), initialState);
 
@@ -108,6 +115,10 @@ const App: React.FC = () => {
 
   const handleItemClick = (item: ResultType) => {
     dispatch({ type: "select", value: item });
+  };
+
+  const handleSidebarTransitionEnd = () => {
+    dispatch({ type: "animating", value: false });
   };
 
   return (
@@ -133,12 +144,16 @@ const App: React.FC = () => {
             zoom={6.75}
             locations={results}
             selected={selected}
+            animating={animating}
             onLocationClick={handleItemClick}
           />
         </section>
-        <aside className={`sidebar`}>
+        <div
+          className={`sidebar ${results.length ? "open" : ""}`}
+          onTransitionEnd={handleSidebarTransitionEnd}
+        >
           <List items={results} onItemClick={handleItemClick} />
-        </aside>
+        </div>
       </main>
     </div>
   );
