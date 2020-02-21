@@ -149,7 +149,7 @@ const App: React.FC = () => {
           />
         </section>
         <div
-          className={`sidebar ${results.length ? "open" : ""}`}
+          className={`sidebar ${selected && results.length ? "open" : ""}`}
           onTransitionEnd={handleSidebarTransitionEnd}
         >
           <List items={results} onItemClick={handleItemClick} />

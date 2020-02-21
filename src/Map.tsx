@@ -116,7 +116,7 @@ export default function Map({
       return;
     }
     // console.log("starting animation");
-    interval.current = setInterval(() => (map as any).resize(), 10);
+    interval.current = setInterval(() => (map as any).resize(), 100);
   }, [animating, map]);
 
   return (

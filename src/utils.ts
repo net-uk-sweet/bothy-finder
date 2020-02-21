@@ -8,8 +8,8 @@ export const getResults = (
   search: string
 ) =>
   search.length > 2
-    ? data[searchType].filter((el: any) =>
-        el.name.toLowerCase().includes(search)
+    ? data[searchType].filter(({ name }: { name: string }) =>
+        name.toLowerCase().includes(search.toLowerCase())
       )
     : [];
 
