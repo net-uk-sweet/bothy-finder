@@ -1,16 +1,29 @@
 import React, { useEffect, useState, useRef } from "react";
+import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import mapboxgl from "mapbox-gl";
 
-import { ResultType } from "./types";
+import { Maybe, ResultType } from "./types";
 import { isMunro } from "./utils";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    mapContainer: {
+      position: "absolute",
+      top: 0,
+      right: 0,
+      left: 0,
+      bottom: 0,
+      margin: 0
+    }
+  })
+);
 
 interface Props {
   lat: number;
   lng: number;
   zoom: number;
   locations: ResultType[];
-  selected?: ResultType;
-  animating: boolean;
+  selected: Maybe<ResultType>;
   onLocationClick: (item: ResultType) => void;
 }
 
@@ -20,12 +33,12 @@ export default function Map({
   zoom,
   locations,
   selected,
-  animating,
   onLocationClick
 }: Props) {
+  const classes = useStyles();
+
   const [map, setMap] = useState(null);
   const mapContainer: any = useRef(null);
-  const interval: any = useRef(null);
 
   const markers: any = useRef([]);
   const renderMarkers = useRef(false);
@@ -60,10 +73,8 @@ export default function Map({
   useEffect(() => {
     let combinedLocations = locations;
 
-    if (!renderMarkers.current) {
-      return;
-    }
     if (selected) {
+      console.log(selected);
       combinedLocations = [selected, ...combinedLocations];
     }
     if (markers.current.length) {
@@ -89,7 +100,7 @@ export default function Map({
     });
 
     if (combinedLocations.length === 1) {
-      (map as any).flyTo({ center: locations[0] });
+      (map as any).flyTo({ center: combinedLocations[0] });
     }
 
     if (combinedLocations.length > 1) {
@@ -106,22 +117,10 @@ export default function Map({
     }
   });
 
-  useEffect(() => {
-    if (!map) {
-      return;
-    }
-    if (!animating && interval.current) {
-      // console.log("clearing animation");
-      interval.current && clearInterval(interval.current);
-      return;
-    }
-    // console.log("starting animation");
-    interval.current = setInterval(() => (map as any).resize(), 100);
-  }, [animating, map]);
-
   return (
-    <div>
-      <div ref={el => (mapContainer.current = el)} className="mapContainer" />
-    </div>
+    <div
+      ref={el => (mapContainer.current = el)}
+      className={classes.mapContainer}
+    />
   );
 }

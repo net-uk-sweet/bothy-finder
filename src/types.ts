@@ -8,6 +8,8 @@ interface BaseResult {
   lng: number;
 }
 
+export type Maybe<T> = T | null;
+
 export interface Munro extends BaseResult {
   height: number;
 }

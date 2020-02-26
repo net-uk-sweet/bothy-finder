@@ -2,16 +2,11 @@ import gridDistance from "./gridDistance";
 
 import { Data, SearchType, ResultType, Munro } from "./types";
 
-export const getResults = (
-  data: Data,
-  searchType: SearchType,
-  search: string
-) =>
-  search.length > 2
-    ? data[searchType].filter(({ name }: { name: string }) =>
-        name.toLowerCase().includes(search.toLowerCase())
-      )
-    : [];
+export const sortAlphabetical = (a: ResultType, b: ResultType) => {
+  if (a.name > b.name) return 1;
+  if (a.name < b.name) return -1;
+  return 0;
+};
 
 export const getResultsWithinRange = (
   data: Data,
