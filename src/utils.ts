@@ -24,3 +24,6 @@ export const isMunro = (tbd: ResultType): boolean => {
   }
   return false;
 };
+
+export const formatGridReference = (grid: string) =>
+  `${grid.slice(0, 2)} ${grid.slice(2, 5)} ${grid.slice(5, 8)}`;

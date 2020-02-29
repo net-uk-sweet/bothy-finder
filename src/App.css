@@ -9,3 +9,8 @@ body, html, #root {
 .mapboxgl-popup-content {
   margin-bottom: 0;
 }
+
+.MuiPaper-root.MuiDrawer-paperAnchorDockedRight {
+  border: none;
+  background-color: transparent;
+}

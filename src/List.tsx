@@ -4,6 +4,7 @@ import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import SimpleCard from "./SimpleCard";
 import { ResultType, Munro } from "./types";
 import { isMunro } from "./utils";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,12 +31,14 @@ export default function List({
         const { name, grid, url } = item;
         return (
           <li key={`${name}${grid}`}>
-            <SimpleCard
-              name={name}
-              grid={grid}
-              url={url}
-              height={isMunro(item) ? (item as Munro).height : undefined}
-            />
+            <Box m={2}>
+              <SimpleCard
+                name={name}
+                grid={grid}
+                url={url}
+                height={isMunro(item) ? (item as Munro).height : undefined}
+              />
+            </Box>
           </li>
         );
       })}

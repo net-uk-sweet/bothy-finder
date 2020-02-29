@@ -5,6 +5,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import Switch from "@material-ui/core/Switch";
+import Badge from "@material-ui/core/Badge";
+import SearchIcon from "@material-ui/icons/Search";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import "./App.css";
 
 import { Maybe, Data, SearchType, ResultType } from "./types";
@@ -18,6 +22,7 @@ import List from "./List";
 import Map from "./Map";
 
 import { getResultsWithinRange } from "./utils";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,6 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "relative",
       flexGrow: 1,
       margin: 0
+    },
+    showResultsToggle: {
+      "& > span": {
+        marginRight: "1rem"
+      }
     }
   })
 );
@@ -53,7 +63,7 @@ const initialState: State = {
   distance: 10,
   selected: null,
   results: [],
-  showResults: true
+  showResults: false
 };
 
 const reducer = (data: any) => (state: State, action: any): State => {
@@ -133,28 +143,55 @@ const App: React.FC = () => {
       <CssBaseline />
       <main className={classes.main}>
         <aside className={classes.toolbar}>
-          <header>
-            <Typography variant="h3" component="h1">
-              Bothy finder
+          <Box mb={3}>
+            <header>
+              <Typography variant="h3" component="h1" gutterBottom={true}>
+                Bothy finder
+              </Typography>
+            </header>
+            <Typography variant="subtitle1" component="p" gutterBottom={true}>
+              You can use this tool to find munros within a certain distance of
+              a specific bothy, or bothies within a certain distance of a
+              specific munro.
             </Typography>
-          </header>
-          <Typography variant="subtitle1" component="p">
-            You can use this tool to find munros within a certain distance of a
-            specific bothy, or bothies within a specific ertain distance of a
-            munro.
-          </Typography>
+          </Box>
           <Divider />
-          <Form
-            data={data[searchType]}
-            selected={selected}
-            searchType={searchType}
-            distance={distance}
-            showResults={showResults}
-            onSelect={handleItemClick}
-            onSearchTypeChange={handleSearchTypeChange}
-            onDistanceChange={handleDistanceChange}
-            onShowResultsChange={handleShowResultsChange}
-          />
+          <Box mt={3}>
+            <Form
+              data={data[searchType]}
+              selected={selected}
+              searchType={searchType}
+              distance={distance}
+              onSelect={handleItemClick}
+              onSearchTypeChange={handleSearchTypeChange}
+              onDistanceChange={handleDistanceChange}
+            />
+          </Box>
+          <Box mt={3} className={classes.showResultsToggle}>
+            <FormControlLabel
+              value="bothies"
+              control={
+                <Switch
+                  checked={showResults}
+                  onChange={(e: any, newValue: boolean) =>
+                    handleShowResultsChange(newValue)
+                  }
+                  value={showResults}
+                  color="primary"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              }
+              label="Show detailed results"
+              labelPlacement="end"
+            />
+            <Badge
+              badgeContent={results.length}
+              color="primary"
+              invisible={!results.length}
+            >
+              <SearchIcon />
+            </Badge>
+          </Box>
         </aside>
         <section className={classes.map}>
           <Map
