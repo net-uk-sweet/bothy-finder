@@ -2,13 +2,8 @@ import React, { useReducer } from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import "typeface-roboto";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import Switch from "@material-ui/core/Switch";
-import Badge from "@material-ui/core/Badge";
-import SearchIcon from "@material-ui/icons/Search";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import "./App.css";
 
 import { Maybe, Data, SearchType, ResultType } from "./types";
@@ -18,7 +13,6 @@ import bothies from "./bothies.json";
 import munros from "./munros.json";
 
 import Form from "./Form";
-import List from "./List";
 import Map from "./Map";
 
 import { getResultsWithinRange } from "./utils";
@@ -41,11 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "relative",
       flexGrow: 1,
       margin: 0
-    },
-    showResultsToggle: {
-      "& > span": {
-        marginRight: "1rem"
-      }
     }
   })
 );
@@ -55,15 +44,13 @@ interface State {
   distance: number;
   selected: Maybe<ResultType>;
   results: ResultType[];
-  showResults: boolean;
 }
 
 const initialState: State = {
   searchType: "bothies",
   distance: 10,
   selected: null,
-  results: [],
-  showResults: false
+  results: []
 };
 
 const reducer = (data: any) => (state: State, action: any): State => {
@@ -99,11 +86,6 @@ const reducer = (data: any) => (state: State, action: any): State => {
         selected,
         results
       };
-    case "showResults":
-      return {
-        ...state,
-        showResults: action.value as boolean
-      };
     default:
       return { ...state };
   }
@@ -117,10 +99,10 @@ const App: React.FC = () => {
     munros: munros.sort(sortAlphabetical)
   };
 
-  const [
-    { searchType, distance, selected, results, showResults },
-    dispatch
-  ] = useReducer(reducer(data), initialState);
+  const [{ searchType, distance, selected, results }, dispatch] = useReducer(
+    reducer(data),
+    initialState
+  );
 
   const handleSearchTypeChange = (searchType: SearchType) => {
     dispatch({ type: "searchType", value: searchType });
@@ -130,12 +112,8 @@ const App: React.FC = () => {
     dispatch({ type: "distance", value: distance });
   };
 
-  const handleItemClick = (item: ResultType) => {
+  const handleSelectChange = (item: ResultType) => {
     dispatch({ type: "select", value: item });
-  };
-
-  const handleShowResultsChange = (show: boolean) => {
-    dispatch({ type: "showResults", value: show });
   };
 
   return (
@@ -162,35 +140,10 @@ const App: React.FC = () => {
               selected={selected}
               searchType={searchType}
               distance={distance}
-              onSelect={handleItemClick}
+              onSelect={handleSelectChange}
               onSearchTypeChange={handleSearchTypeChange}
               onDistanceChange={handleDistanceChange}
             />
-          </Box>
-          <Box mt={3} className={classes.showResultsToggle}>
-            <FormControlLabel
-              value="bothies"
-              control={
-                <Switch
-                  checked={showResults}
-                  onChange={(e: any, newValue: boolean) =>
-                    handleShowResultsChange(newValue)
-                  }
-                  value={showResults}
-                  color="primary"
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
-              }
-              label="Show detailed results"
-              labelPlacement="end"
-            />
-            <Badge
-              badgeContent={results.length}
-              color="primary"
-              invisible={!results.length}
-            >
-              <SearchIcon />
-            </Badge>
           </Box>
         </aside>
         <section className={classes.map}>
@@ -200,16 +153,8 @@ const App: React.FC = () => {
             zoom={6.75}
             locations={results}
             selected={selected}
-            onLocationClick={handleItemClick}
           />
         </section>
-        <Drawer
-          anchor="right"
-          variant="persistent"
-          open={showResults && results.length > 0}
-        >
-          <List items={results} onItemClick={handleItemClick} />
-        </Drawer>
       </main>
     </>
   );

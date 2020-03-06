@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
-import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
+import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
+import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
+import TerrainIcon from "@material-ui/icons/Terrain";
+import HomeIcon from "@material-ui/icons/Home";
 
-import { Maybe, ResultType } from "./types";
+import { Maybe, ResultType, Munro } from "./types";
 import { isMunro } from "./utils";
+import SimpleCard from "./SimpleCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,17 +28,9 @@ interface Props {
   zoom: number;
   locations: ResultType[];
   selected: Maybe<ResultType>;
-  onLocationClick: (item: ResultType) => void;
 }
 
-export default function Map({
-  lat,
-  lng,
-  zoom,
-  locations,
-  selected,
-  onLocationClick
-}: Props) {
+export default function Map({ lat, lng, zoom, locations, selected }: Props) {
   const classes = useStyles();
 
   const [map, setMap] = useState(null);
@@ -42,12 +38,6 @@ export default function Map({
 
   const markers: any = useRef([]);
   const renderMarkers = useRef(false);
-
-  const handleClick = (location: ResultType) => () => {
-    if (!selected) {
-      onLocationClick(location);
-    }
-  };
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -74,7 +64,6 @@ export default function Map({
     let combinedLocations = locations;
 
     if (selected) {
-      console.log(selected);
       combinedLocations = [selected, ...combinedLocations];
     }
     if (markers.current.length) {
@@ -83,17 +72,39 @@ export default function Map({
       });
     }
     markers.current = combinedLocations.map((location, i) => {
-      const popup = new mapboxgl.Popup({ offset: [-15, -15] }).setText(
-        location.name
+      const popupEl = document.createElement("div");
+      const card = (
+        <SimpleCard
+          name={location.name}
+          grid={location.grid}
+          height={isMunro(location) ? (location as Munro).height : undefined}
+          url={location.url}
+          selected={true}
+          onClick={() => {}}
+        />
       );
 
-      const el = document.createElement("div");
-      el.innerHTML = isMunro(location) ? "&#9650" : "&#x2302";
-      el.style.fontSize = isMunro(location) ? "25px" : "35px";
-      el.style.color = i === 0 && selected ? "red" : "black";
-      el.addEventListener("click", handleClick(location));
+      ReactDOM.render(card, popupEl);
 
-      return new mapboxgl.Marker(el, { offset: [-15, -15] })
+      const popup = new mapboxgl.Popup({
+        offset: {
+          top: [-10, 0],
+          right: [-30, -20],
+          bottom: [-10, -35],
+          left: [10, -20]
+        },
+        closeButton: false,
+        maxWidth: "none"
+      }).setDOMContent(popupEl);
+
+      const el = document.createElement("div");
+      const color = i === 0 && selected ? "secondary" : "primary";
+      const Icon = isMunro(location) ? TerrainIcon : HomeIcon;
+      const size = isMunro(location) ? "large" : "default";
+
+      ReactDOM.render(<Icon color={color} fontSize={size} />, el);
+
+      return new mapboxgl.Marker(el, { offset: [-10, -15] })
         .setLngLat([location.lng, location.lat])
         .setPopup(popup)
         .addTo(map as any);

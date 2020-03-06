@@ -17,11 +17,7 @@ import { formatGridReference } from "./utils";
 
 const useStyles = makeStyles({
   root: {
-    width: 340,
-    backgroundColor: "#fff"
-  },
-  actions: {
-    padding: 16
+    width: "250px"
   }
 });
 
@@ -30,43 +26,48 @@ type Props = {
   grid: string;
   url: string;
   height?: number;
+  selected: boolean;
+  onClick: () => void;
 };
 
-export default function SimpleCard({ name, grid, url, height }: Props) {
+export default function SimpleCard({
+  name,
+  grid,
+  url,
+  height,
+  selected,
+  onClick
+}: Props) {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root} component="article" raised>
-      <CardContent>
-        <Box mb={2}>
-          <Typography variant="h5" component="h2">
-            {name}
-          </Typography>
-        </Box>
-        <Divider />
-        <List component="ul" aria-label="main mailbox folders" dense>
-          {height && (
-            <ListItem component="li">
-              <ListItemIcon>
-                <HeightIcon />
-              </ListItemIcon>
-              <ListItemText primary="Height" secondary={`${height} metres`} />
-            </ListItem>
-          )}
+    <Box className={classes.root} component="article" onClick={onClick}>
+      <Box mb={2}>
+        <Typography variant="h5" component="h2">
+          {name}
+        </Typography>
+      </Box>
+      <Divider />
+      <List component="ul" aria-label="main mailbox folders" dense>
+        {height && (
           <ListItem component="li">
             <ListItemIcon>
-              <LocationOnIcon />
+              <HeightIcon />
             </ListItemIcon>
-            <ListItemText
-              primary="Grid reference"
-              secondary={formatGridReference(grid)}
-            />
+            <ListItemText primary="Height" secondary={`${height} metres`} />
           </ListItem>
-        </List>
-      </CardContent>
-      <CardActions className={classes.actions}>
-        <Link href={url}>Learn More</Link>
-      </CardActions>
-    </Card>
+        )}
+        <ListItem component="li">
+          <ListItemIcon>
+            <LocationOnIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary="Grid reference"
+            secondary={formatGridReference(grid)}
+          />
+        </ListItem>
+      </List>
+      <Link href={url}>Learn More</Link>
+    </Box>
   );
 }
