@@ -1,4 +1,4 @@
-export type SearchType = "bothies" | "munros";
+export type SearchType = "bothy" | "munro";
 
 interface BaseResult {
   name: string;
@@ -19,6 +19,6 @@ export interface Bothy extends BaseResult {}
 export type ResultType = Munro | Bothy;
 
 export interface Data {
-  bothies: ResultType[];
-  munros: ResultType[];
+  bothy: ResultType[];
+  munro: ResultType[];
 }

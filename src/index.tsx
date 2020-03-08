@@ -12,7 +12,8 @@ ReactDOM.render(<App />, document.getElementById("root"));
 serviceWorker.unregister();
 
 /* TODO
-    [ ] - toasts on results
+    [x] - toasts on results
     [ ] - animated selection icons
-    [ ] - border on panel
+    [x] - border on panel
+    [ ] - mobile
 */

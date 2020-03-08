@@ -2,21 +2,19 @@ import React, { useReducer } from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import "typeface-roboto";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
+import { Divider } from "@material-ui/core";
 import "./App.css";
 
 import { Maybe, Data, SearchType, ResultType } from "./types";
-import { sortAlphabetical } from "./utils";
+import { sortAlphabetical, getResultsWithinRange } from "./utils";
 
 import bothies from "./bothies.json";
 import munros from "./munros.json";
 
+import Notification from "./Notification";
+import Intro from "./Intro";
 import Form from "./Form";
 import Map from "./Map";
-
-import { getResultsWithinRange } from "./utils";
-import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,9 +25,10 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: "hidden"
     },
     toolbar: {
-      overflowY: "scroll",
+      boxShadow: "5px 0 5px -2px rgba(0, 0, 0, 0.2)",
       padding: "1.5rem",
-      width: "350px"
+      width: "350px",
+      zIndex: 1
     },
     map: {
       position: "relative",
@@ -47,7 +46,7 @@ interface State {
 }
 
 const initialState: State = {
-  searchType: "bothies",
+  searchType: "bothy",
   distance: 10,
   selected: null,
   results: []
@@ -95,8 +94,8 @@ const App: React.FC = () => {
   const classes = useStyles();
 
   const data: Data = {
-    bothies: bothies.sort(sortAlphabetical),
-    munros: munros.sort(sortAlphabetical)
+    bothy: bothies.sort(sortAlphabetical),
+    munro: munros.sort(sortAlphabetical)
   };
 
   const [{ searchType, distance, selected, results }, dispatch] = useReducer(
@@ -119,32 +118,25 @@ const App: React.FC = () => {
   return (
     <>
       <CssBaseline />
+      <Notification
+        results={results}
+        searchType={searchType}
+        selected={selected}
+        distance={distance}
+      />
       <main className={classes.main}>
         <aside className={classes.toolbar}>
-          <Box mb={3}>
-            <header>
-              <Typography variant="h3" component="h1" gutterBottom={true}>
-                Bothy finder
-              </Typography>
-            </header>
-            <Typography variant="subtitle1" component="p" gutterBottom={true}>
-              You can use this tool to find munros within a certain distance of
-              a specific bothy, or bothies within a certain distance of a
-              specific munro.
-            </Typography>
-          </Box>
+          <Intro />
           <Divider />
-          <Box mt={3}>
-            <Form
-              data={data[searchType]}
-              selected={selected}
-              searchType={searchType}
-              distance={distance}
-              onSelect={handleSelectChange}
-              onSearchTypeChange={handleSearchTypeChange}
-              onDistanceChange={handleDistanceChange}
-            />
-          </Box>
+          <Form
+            data={data[searchType]}
+            selected={selected}
+            searchType={searchType}
+            distance={distance}
+            onSelect={handleSelectChange}
+            onSearchTypeChange={handleSearchTypeChange}
+            onDistanceChange={handleDistanceChange}
+          />
         </aside>
         <section className={classes.map}>
           <Map
