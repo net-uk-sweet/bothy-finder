@@ -2,11 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import TerrainIcon from "@material-ui/icons/Terrain";
-import HomeIcon from "@material-ui/icons/Home";
 
 import { Maybe, ResultType, Munro } from "./types";
 import { isMunro } from "./utils";
+import Marker from "./Marker";
 import SimpleCard from "./SimpleCard";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface Props {
+interface MapProps {
   lat: number;
   lng: number;
   zoom: number;
@@ -30,7 +29,7 @@ interface Props {
   selected: Maybe<ResultType>;
 }
 
-export default function Map({ lat, lng, zoom, locations, selected }: Props) {
+export default function Map({ lat, lng, zoom, locations, selected }: MapProps) {
   const classes = useStyles();
 
   const [map, setMap] = useState(null);
@@ -98,11 +97,7 @@ export default function Map({ lat, lng, zoom, locations, selected }: Props) {
       }).setDOMContent(popupEl);
 
       const el = document.createElement("div");
-      const color = i === 0 && selected ? "secondary" : "primary";
-      const Icon = isMunro(location) ? TerrainIcon : HomeIcon;
-      const size = isMunro(location) ? "large" : "default";
-
-      ReactDOM.render(<Icon color={color} fontSize={size} />, el);
+      ReactDOM.render(<Marker location={location} selected={i === 0} />, el);
 
       return new mapboxgl.Marker(el, { offset: [-10, -15] })
         .setLngLat([location.lng, location.lat])

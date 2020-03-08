@@ -13,7 +13,9 @@ serviceWorker.unregister();
 
 /* TODO
     [x] - toasts on results
-    [ ] - animated selection icons
+    [x] - animated selection icons
     [x] - border on panel
+    [x] - css duplcication
     [ ] - mobile
+    [ ] - testing
 */
