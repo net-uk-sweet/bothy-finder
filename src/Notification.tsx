@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import { Snackbar, Slide } from "@material-ui/core";
 import { TransitionProps } from "@material-ui/core/transitions";
@@ -11,6 +12,15 @@ function SlideTransition(props: TransitionProps) {
 }
 
 const AUTO_HIDE_DURATION = 10000;
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    alert: {
+      boxShadow:
+        "0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)"
+    }
+  })
+);
 
 interface NotificationProps {
   results: ResultType[];
@@ -26,12 +36,11 @@ export default function Notification({
   distance
 }: NotificationProps) {
   const [open, setOpen] = useState(false);
+  const classes = useStyles();
 
   useEffect(() => {
-    const isOpen =
-      (!!selected && results.length === 0) || (!!selected && !!results.length);
-    setOpen(isOpen);
-  }, [selected, results.length, distance]);
+    setOpen(!!selected);
+  }, [selected]);
 
   const alertType = results.length ? "success" : "warning";
   const alertMessage = results.length
@@ -54,7 +63,9 @@ export default function Notification({
       TransitionComponent={SlideTransition}
       onClose={() => setOpen(false)}
     >
-      <Alert severity={alertType}>{alertMessage}</Alert>
+      <Alert className={classes.alert} severity={alertType}>
+        {alertMessage}
+      </Alert>
     </Snackbar>
   );
 }

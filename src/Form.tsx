@@ -1,5 +1,4 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {
   Box,
@@ -8,7 +7,9 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-  FormLabel
+  FormLabel,
+  TextField,
+  Divider
 } from "@material-ui/core/";
 
 import { Maybe, SearchType, ResultType } from "./types";
@@ -35,7 +36,7 @@ export default function Form({
   const isBothySearch = searchType === "bothy";
 
   return (
-    <Box mt={3}>
+    <Box mt={1}>
       <form onSubmit={(e: any) => e.preventDefault()}>
         <FormControl component="fieldset" fullWidth={true} margin="normal">
           <FormLabel component="legend">Search for</FormLabel>
@@ -62,6 +63,9 @@ export default function Form({
             />
           </RadioGroup>
         </FormControl>
+        <Box mt={1} mb={1}>
+          <Divider />
+        </Box>
         <FormControl component="fieldset" fullWidth={true} margin="normal">
           <FormLabel component="legend">{`Within ${distance} km of`}</FormLabel>
           <Slider
@@ -82,6 +86,9 @@ export default function Form({
             aria-labelledby="non-linear-slider"
           />
         </FormControl>
+        <Box mt={1} mb={1}>
+          <Divider />
+        </Box>
         <FormControl component="fieldset" fullWidth={true} margin="normal">
           <Autocomplete
             id="combo-box-demo"

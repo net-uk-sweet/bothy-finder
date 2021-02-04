@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 12,
       left: 11,
       animation: `$pulse 2s infinite`,
+      animationDelay: "3s",
       zIndex: -1
     },
     munro: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: "50%",
       position: "absolute",
       animation: `$pulse 2s infinite`,
+      animationDelay: "3s",
       zIndex: -1,
       top: 18,
       left: 16
@@ -58,9 +60,9 @@ export default function Marker({ location, selected }: MarkerProps) {
     : [HomeIcon, "default", classes.bothy];
   const color = selected ? "secondary" : "primary";
   return (
-    <div>
+    <>
       <Icon color={color} fontSize={iconSize as any} />
       <div className={selected ? iconClass : ""} />
-    </div>
+    </>
   );
 }

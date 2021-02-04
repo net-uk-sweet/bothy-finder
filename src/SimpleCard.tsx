@@ -1,18 +1,18 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Link from "@material-ui/core/Link";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import Box from "@material-ui/core/Box";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+import {
+  Link,
+  Typography,
+  Divider,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon
+} from "@material-ui/core";
 import HeightIcon from "@material-ui/icons/Height";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+
 import { formatGridReference } from "./utils";
 
 const useStyles = makeStyles({
