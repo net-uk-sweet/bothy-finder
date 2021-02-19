@@ -33,6 +33,7 @@ export default function Map({ lat, lng, zoom, locations, selected }: MapProps) {
   const classes = useStyles();
 
   const [map, setMap] = useState(null);
+  const [loaded, setLoaded] = useState(false);
   const mapContainer: any = useRef(null);
 
   const markers: any = useRef([]);
@@ -53,6 +54,7 @@ export default function Map({ lat, lng, zoom, locations, selected }: MapProps) {
         renderMarkers.current = true;
         setMap(map);
         map.resize();
+        setLoaded(true);
       });
     };
 
@@ -97,6 +99,7 @@ export default function Map({ lat, lng, zoom, locations, selected }: MapProps) {
       }).setDOMContent(popupEl);
 
       const el = document.createElement("div");
+      console.log(el);
       ReactDOM.render(<Marker location={location} selected={i === 0} />, el);
 
       return new mapboxgl.Marker(el, { offset: [-10, -15] })
@@ -126,7 +129,7 @@ export default function Map({ lat, lng, zoom, locations, selected }: MapProps) {
   return (
     <div
       ref={el => (mapContainer.current = el)}
-      className={classes.mapContainer}
+      className={`${classes.mapContainer} ${loaded ? "mapbox-loaded" : ""}`}
     />
   );
 }
