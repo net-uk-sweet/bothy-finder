@@ -16,6 +16,8 @@ import Intro from "./Intro";
 import Form from "./Form";
 import Map from "./Map";
 
+const storageKey = "bothySearch";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     main: {
@@ -56,38 +58,47 @@ const reducer = (data: any) => (state: State, action: any): State => {
   const { searchType, distance } = state;
   let { selected } = state;
   let results: ResultType[] = [];
+  let newState: State;
 
   const resultsWithRange = (selected: ResultType, distance: number) =>
     getResultsWithinRange(data, searchType, selected, distance);
 
   switch (action.type) {
+    case "saved":
+      newState = { ...action.value };
+      break;
     case "searchType":
-      return {
+      newState = {
         ...state,
         searchType: action.value,
         selected: null,
         results: []
       };
+      break;
     case "distance":
       if (selected) {
         results = resultsWithRange(selected, action.value);
       }
-      return {
+      newState = {
         ...state,
         distance: action.value,
         results
       };
+      break;
     case "select":
       selected = action.value as ResultType;
       results = resultsWithRange(selected, distance);
-      return {
+      newState = {
         ...state,
         selected,
         results
       };
+      break;
     default:
-      return { ...state };
+      newState = { ...state };
   }
+  window.localStorage.setItem(storageKey, JSON.stringify(newState));
+  return newState;
 };
 
 const App: React.FC = () => {
@@ -113,6 +124,11 @@ const App: React.FC = () => {
 
   const handleSelectChange = (item: ResultType) => {
     dispatch({ type: "select", value: item });
+  };
+
+  const handleMapLoad = () => {
+    const savedState = window.localStorage.getItem(storageKey);
+    savedState && dispatch({ type: "saved", value: JSON.parse(savedState) });
   };
 
   return (
@@ -145,6 +161,7 @@ const App: React.FC = () => {
             zoom={6.75}
             locations={results}
             selected={selected}
+            onLoad={handleMapLoad}
           />
         </section>
       </main>

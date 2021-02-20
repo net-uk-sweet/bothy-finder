@@ -27,9 +27,17 @@ interface MapProps {
   zoom: number;
   locations: ResultType[];
   selected: Maybe<ResultType>;
+  onLoad(): void;
 }
 
-export default function Map({ lat, lng, zoom, locations, selected }: MapProps) {
+export default function Map({
+  lat,
+  lng,
+  zoom,
+  locations,
+  selected,
+  onLoad
+}: MapProps) {
   const classes = useStyles();
 
   const [map, setMap] = useState(null);
@@ -55,11 +63,12 @@ export default function Map({ lat, lng, zoom, locations, selected }: MapProps) {
         setMap(map);
         map.resize();
         setLoaded(true);
+        onLoad();
       });
     };
 
     if (!map) initializeMap({ setMap, mapContainer });
-  }, [lat, lng, map, zoom]);
+  }, [lat, lng, map, zoom, onLoad]);
 
   useEffect(() => {
     let combinedLocations = locations;
@@ -99,7 +108,6 @@ export default function Map({ lat, lng, zoom, locations, selected }: MapProps) {
       }).setDOMContent(popupEl);
 
       const el = document.createElement("div");
-      console.log(el);
       ReactDOM.render(<Marker location={location} selected={i === 0} />, el);
 
       return new mapboxgl.Marker(el, { offset: [-10, -15] })
