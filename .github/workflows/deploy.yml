@@ -1,26 +1,21 @@
-name: Publish to GitHub Pages
-
-on:
-  push:
-    branches:
-      - master
-
+name: Build and Deploy
+on: [push]
 jobs:
-  publish:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out
-        uses: actions/checkout@v1
-
-      - name: Generate your awesome content
-        run: |
-          yarn install
-          yarn build
-
-      - name: Publish generated content to GitHub Pages
-        uses: tsunematsu21/actions-publish-gh-pages@v1.0.1
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+      - uses: actions/setup-node@v2
         with:
-          dir: build
-          repo: net-uk-sweet/net-uk-sweet.github.io
-          branch: master
-          token: ${{ secrets.ACCESS_TOKEN }}
+          node-version: '10'
+      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: build # The folder the action should deploy.
