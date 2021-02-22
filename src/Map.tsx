@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
-import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 
 import { Maybe, ResultType, Munro } from "./types";
 import { isMunro } from "./utils";
 import Marker from "./Marker";
 import SimpleCard from "./SimpleCard";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     mapContainer: {
       position: "absolute",
