@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /*
  * Calculate distance between two National Grid Reference points.
  *
