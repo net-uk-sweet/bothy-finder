@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
+  "homepage": "bothy-finder",
   "dependencies": {
     "@cypress/code-coverage": "^3.9.2",
     "@cypress/instrument-cra": "^1.4.0",
