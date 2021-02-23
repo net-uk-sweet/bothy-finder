@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/bothy-finder/precache-manifest.c3d81ec07f4bed1f5f250853e66db2ab.js"
+  "/bothy-finder/precache-manifest.5d1262e333d15e6452a0c0ba511c9c2a.js"
 );
 
 self.addEventListener('message', (event) => {

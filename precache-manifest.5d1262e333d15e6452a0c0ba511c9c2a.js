@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4b4ba54a00d8dea9c96017b3603c90d7",
+    "revision": "beaac93662a3997617375361d672abca",
     "url": "/bothy-finder/index.html"
   },
   {
-    "revision": "517d4b9c6d6061f938f0",
+    "revision": "f139acafc9e199230637",
     "url": "/bothy-finder/static/css/2.a83be65f.chunk.css"
   },
   {
-    "revision": "b2a3f0f9d7d149f514e1",
+    "revision": "615c33f0b2be089294ff",
     "url": "/bothy-finder/static/css/main.f03a2867.chunk.css"
   },
   {
-    "revision": "517d4b9c6d6061f938f0",
-    "url": "/bothy-finder/static/js/2.7a165dd1.chunk.js"
+    "revision": "f139acafc9e199230637",
+    "url": "/bothy-finder/static/js/2.0c4892a8.chunk.js"
   },
   {
-    "revision": "b2a3f0f9d7d149f514e1",
-    "url": "/bothy-finder/static/js/main.15e67d18.chunk.js"
+    "revision": "615c33f0b2be089294ff",
+    "url": "/bothy-finder/static/js/main.d0dcc105.chunk.js"
   },
   {
-    "revision": "2ea46df9345f05d5746a",
-    "url": "/bothy-finder/static/js/runtime-main.2acf0fb4.js"
+    "revision": "60c8812cf99efa0bac20",
+    "url": "/bothy-finder/static/js/runtime-main.464bd811.js"
   },
   {
     "revision": "5cb7edfceb233100075dc9a1e12e8da3",
